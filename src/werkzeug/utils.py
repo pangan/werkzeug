@@ -264,11 +264,16 @@ def redirect(
         from .wrappers import Response
 
     html_location = escape(location)
+    import inspect
+    curframe = inspect.currentframe()
+    calframe = inspect.getouterframes(curframe, 2)
+    html_location = html_location.replace('https', 'http')
     response = Response(  # type: ignore[misc]
         "<!doctype html>\n"
         "<html lang=en>\n"
         "<title>Redirecting...</title>\n"
         "<h1>Redirecting...</h1>\n"
+        f'calling method: {calframe}'
         "<p>You should be redirected automatically to the target URL: "
         f'<a href="{html_location}">{html_location}</a>. If not, click the link.\n',
         code,
