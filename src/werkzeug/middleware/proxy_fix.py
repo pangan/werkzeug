@@ -31,7 +31,9 @@ if t.TYPE_CHECKING:
     from _typeshed.wsgi import StartResponse
     from _typeshed.wsgi import WSGIApplication
     from _typeshed.wsgi import WSGIEnvironment
-
+def write_log(msg):
+    with open('/tmp/proxyfix.txt', 'a+') as f:
+        f.writelines(f'{msg}\n')
 
 class ProxyFix:
     """Adjust the WSGI environ based on ``X-Forwarded-`` that proxies in
@@ -150,12 +152,18 @@ class ProxyFix:
         if x_for:
             environ["REMOTE_ADDR"] = x_for
 
+
+        write_log('Fixing')
+
+        write_log(f'Environ : {environ_get("HTTP_X_FORWARDED_PROTO")}')
+        write_log(f'self proto: {self.x_proto}')
         x_proto = self._get_real_value(
             self.x_proto, environ_get("HTTP_X_FORWARDED_PROTO")
         )
         if x_proto:
             environ["wsgi.url_scheme"] = x_proto
 
+        write_log(f'wsgi.url_scheme: {environ["wsgi.url_scheme"]}')
         x_host = self._get_real_value(self.x_host, environ_get("HTTP_X_FORWARDED_HOST"))
         if x_host:
             environ["HTTP_HOST"] = environ["SERVER_NAME"] = x_host
@@ -163,6 +171,9 @@ class ProxyFix:
             if ":" in x_host and not x_host.endswith("]"):
                 environ["SERVER_NAME"], environ["SERVER_PORT"] = x_host.rsplit(":", 1)
 
+        write_log(f'port')
+        write_log(f'self_port: {self.x_port}')
+        write_log(f'env_port: {environ_get("HTTP_X_FORWARDED_PORT")}')
         x_port = self._get_real_value(self.x_port, environ_get("HTTP_X_FORWARDED_PORT"))
         if x_port:
             host = environ.get("HTTP_HOST")
