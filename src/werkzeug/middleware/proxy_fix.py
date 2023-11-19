@@ -165,6 +165,7 @@ class ProxyFix:
         x_proto = self._get_real_value(
             self.x_proto, environ_get("HTTP_X_FORWARDED_PROTO")
         )
+        write_log(f'wsgi.url_scheme before: {environ["wsgi.url_scheme"]}')
         if x_proto:
             environ["wsgi.url_scheme"] = x_proto
         write_log(f'x_proto: {x_proto}')
