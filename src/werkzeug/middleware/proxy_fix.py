@@ -117,10 +117,15 @@ class ProxyFix:
 
         .. versionadded:: 0.15
         """
+        write_log('------')
+        write_log(f'ger_real_value')
+        write_log(f'trusted: {trusted}, value: {value}')
         if not (trusted and value):
             return None
         values = parse_list_header(value)
+        write_log(f'values: {values}')
         if len(values) >= trusted:
+            write_log(f'return values: {values[-trusted]}')
             return values[-trusted]
         return None
 
@@ -162,7 +167,7 @@ class ProxyFix:
         )
         if x_proto:
             environ["wsgi.url_scheme"] = x_proto
-
+        write_log(f'x_proto: {x_proto}')
         write_log(f'wsgi.url_scheme: {environ["wsgi.url_scheme"]}')
         x_host = self._get_real_value(self.x_host, environ_get("HTTP_X_FORWARDED_HOST"))
         if x_host:
