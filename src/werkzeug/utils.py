@@ -267,7 +267,9 @@ def redirect(
     import inspect
     curframe = inspect.currentframe()
     calframe = inspect.getouterframes(curframe, 2)
-    html_location = html_location.replace('https', 'http')
+    with open('/tmp/werk.txt', 'a+') as f:
+        f.writelines(f'original: {html_location}')
+    #html_location = html_location.replace('https', 'http')
     response = Response(  # type: ignore[misc]
         "<!doctype html>\n"
         "<html lang=en>\n"
