@@ -137,6 +137,11 @@ class ProxyFix:
         original environ values in ``werkzeug.proxy_fix.orig_{key}``.
         """
         environ_get = environ.get
+        write_log('-= environments =-')
+        for name, value in environ.items():
+            write_log("{0}: {1}".format(name, value))
+        write_log('-= end environments =-')
+
         orig_remote_addr = environ_get("REMOTE_ADDR")
         orig_wsgi_url_scheme = environ_get("wsgi.url_scheme")
         orig_http_host = environ_get("HTTP_HOST")
