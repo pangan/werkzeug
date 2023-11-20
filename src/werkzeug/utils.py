@@ -270,7 +270,8 @@ def redirect(
     with open('/tmp/werk.txt', 'a+') as f:
 
         f.writelines(f'original: {html_location}\n')
-    html_location = html_location.replace('https', 'http')
+    if 'envoy.tw.ee' in html_location:
+        html_location = html_location.replace('https', 'http')
     response = Response(  # type: ignore[misc]
         "<!doctype html>\n"
         "<html lang=en>\n"
